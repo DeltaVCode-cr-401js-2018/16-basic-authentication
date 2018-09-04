@@ -4,6 +4,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "node .",
     "test": "jest",
     "watch": "nodemon ."
@@ -20,7 +21,7 @@
   },
   "homepage": "https://github.com/DeltaVCode-cr-401js-2018/16-basic-authentication#readme",
   "devDependencies": {
-    "eslint": "^5.4.0",
+    "eslint": "^5.5.0",
     "jest": "^23.5.0",
     "nodemon": "^1.18.3",
     "supertest": "^3.1.0"
@@ -29,12 +30,14 @@
     "babel-env": "^2.4.1",
     "babel-eslint": "^8.2.6",
     "babel-register": "^6.26.0",
+    "bcrypt": "^3.0.0",
     "cors": "^2.8.4",
     "debug": "^3.1.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "mongoose": "^5.2.10",
     "morgan": "^1.9.0",
-    "require-all": "^3.0.0"
+    "require-all": "^3.0.0",
+    "uuid": "^3.3.2"
   }
 }
