@@ -1,19 +1,20 @@
 'use strict';
 
+jest.mock('require-all');
 import modelFinder from '../../src/middleware/models';
 
 describe('Model Finder Middleware', () => {
   it ('returns a model when a valid model is requested', done => {
-    // /api/:model where :model = notes
+    // /api/:model where :model = foo-route
     let req = {
       params: {
-        model: 'notes',
+        model: 'foo-route',
       },
     };
     let res = {};
     let next = () => {
       expect(req.Model).toBeDefined();
-      expect(req.Model.modelName).toBe('note');
+      expect(req.Model.modelName).toBe('foo');
       done();
     };
 
