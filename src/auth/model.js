@@ -22,4 +22,14 @@ userSchema.methods.comparePassword = function(password) {
     .then(valid => valid ? this : null);
 };
 
+userSchema.statics.authenticate = function(auth){
+  let query = { username: auth.username };
+  return this.findOne(query)
+    .then(user => user && user.comparePassword(auth.password));
+};
+
+userSchema.methods.generateToken = function(){
+  return 'change me';
+};
+
 export default mongoose.model('users', userSchema);

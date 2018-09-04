@@ -6,16 +6,15 @@ import modelFinder from '../../src/middleware/models';
 
 describe('Model Finder Middleware', () => {
   it ('returns a model when a valid model is requested', done => {
-    // /api/:model where :model = notes
     let req = {
       params: {
-        model: 'notes',
+        model: 'bar',
       },
     };
     let res = {};
     let next = () => {
       expect(req.Model).toBeDefined();
-      expect(req.Model.modelName).toBe('note');
+      expect(req.Model.modelName).toBe('bar');
       done();
     };
 
