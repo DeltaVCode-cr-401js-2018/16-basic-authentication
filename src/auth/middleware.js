@@ -15,7 +15,6 @@ export default (req, res, next) => {
     let base64header = authHeader.replace(/^basic\s+/i, '');
     let base64buffer = Buffer.from(base64header, 'base64');
     let bufferString = base64buffer.toString();
-    console.log({ base64header, bufferString })
 
     let [username,password] = bufferString.split(':', 2);
     auth = { username, password };

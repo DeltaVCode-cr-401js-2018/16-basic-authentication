@@ -17,7 +17,7 @@ describe('Auth Middleware', () => {
         authorization: `Basic ${code}`,
       },
     };
-    let res = {};
+    let res = new FakeResponse();
 
     // auth = middleware, which receives request, response, next
     auth(req, res, () => {
@@ -28,7 +28,7 @@ describe('Auth Middleware', () => {
 
   it('returns error when the auth header is not present', done => {
     let req = { headers: {} };
-    let res = {};
+    let res = new FakeResponse();
 
     auth(req, res, (err) => {
       expect(err).toBeDefined();
@@ -43,7 +43,7 @@ describe('Auth Middleware', () => {
         authorization: 'Basic Basic',
       },
     };
-    let res = {};
+    let res = new FakeResponse();
 
     auth(req, res, (err) => {
       expect(err).toBeDefined();
@@ -54,3 +54,8 @@ describe('Auth Middleware', () => {
 
   // TODO: real username/password mismatch
 });
+
+class FakeResponse {
+  setHeader() {
+  }
+}
