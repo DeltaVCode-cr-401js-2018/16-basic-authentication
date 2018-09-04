@@ -1,5 +1,7 @@
 'use strict';
 
+jest.mock('require-all');
+
 import modelFinder from '../../src/middleware/models';
 
 describe('Model Finder Middleware', () => {
