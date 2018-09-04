@@ -101,4 +101,22 @@ describe('auth model', () => {
       });
     });
   });
+
+  describe('generateToken', () => {
+    let password;
+    let user;
+
+    beforeEach(() => {
+      password = uuid();
+      user = new User({
+        username: uuid(),
+        password: password,
+      });
+      return user.save();
+    });
+
+    it('generates a token', () => {
+      expect(user.generateToken()).toBe('change me');
+    });
+  });
 });

@@ -34,4 +34,9 @@ userSchema.statics.authenticate = function(auth) {
     .then(user => user && user.comparePassword(auth.password));
 };
 
+userSchema.methods.generateToken = function () {
+  // TODO: generate a real token
+  return 'change me';
+};
+
 export default mongoose.model('users', userSchema);
