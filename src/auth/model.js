@@ -26,4 +26,12 @@ userSchema.methods.comparePassword = function(password) {
     .then(valid => valid ? this : null);
 };
 
+userSchema.statics.authenticate = function(auth) {
+  // MongoDB query by username
+  let query = { username: auth.username };
+
+  return this.findOne(query)
+    .then(user => user && user.comparePassword(auth.password));
+};
+
 export default mongoose.model('users', userSchema);

@@ -40,4 +40,65 @@ describe('auth model', () => {
           .resolves.toBe(null);
       });
   });
+
+  describe('password hashing', () => {
+    let password;
+    let user;
+
+    beforeEach(() => {
+      password = uuid();
+      user = new User({
+        username: uuid(),
+        password: password,
+      });
+      return user.save();
+    });
+
+    it('saves password hashed', () => {
+      expect(user.password).not.toEqual(password);
+    });
+
+    it('can successfully compare passwords', () => {
+      return expect(user.comparePassword(password))
+        .resolves.toBe(user);
+    });
+
+    it('returns null if password does not match', () => {
+      return expect(user.comparePassword('wrong'))
+        .resolves.toBe(null);
+    });
+
+    describe('User.authenticate()', () => {
+      it('resolves with user given correct password', () => {
+        return User.authenticate({
+          username: user.username,
+          password: password,
+        })
+          .then(authUser => {
+            expect(authUser).toBeDefined();
+            expect(authUser.username).toBe(user.username);
+          });
+      });
+
+      it('resolves with null given incorrect password', () => {
+        return User.authenticate({
+          username: user.username,
+          password: 'oops',
+        })
+          .then(authUser => {
+            expect(authUser).toBe(null);
+          });
+      });
+
+      it('resolves with null given incorrect username', () => {
+        return User.authenticate({
+          username: 'oops',
+          password: password,
+        })
+          .then(authUser => {
+            expect(authUser).toBe(null);
+          });
+      });
+    });
+  });
 });
