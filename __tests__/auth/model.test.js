@@ -125,5 +125,28 @@ describe('auth model', () => {
       expect(verification).toBeDefined();
       expect(verification.id).toBe(user._id.toString());
     });
+
+    describe('User.authorize()', () => {
+      it('can get user from valid token', () => {
+        var token = user.generateToken();
+
+        return User.authorize(token)
+          .then(authedUser => {
+            expect(authedUser).toBeDefined();
+            expect(authedUser._id).toEqual(user._id);
+          });
+      });
+
+      it('resolves with null for invalid token', () => {
+        var token = 'oops';
+
+        return User.authorize(token)
+          .then(authedUser => {
+            expect(authedUser).toBe(null);
+          });
+      });
+
+      // TODO: resolves with null for valid token with id not found
+    });
   });
 });
