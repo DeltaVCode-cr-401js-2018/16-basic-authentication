@@ -24,6 +24,7 @@ userSchema.methods.comparePassword = function(password) {
 
 userSchema.statics.authenticate = function(auth){
   let query = { username: auth.username };
+  console.log(auth.username, auth.password);
   return this.findOne(query)
     .then(user => user && user.comparePassword(auth.password));
 };
