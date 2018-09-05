@@ -1,6 +1,7 @@
 'use strict';
 
 import User from '../../src/auth/model';
+import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
 
 const mongoConnect = require('../../src/util/mongo-connect');
@@ -116,7 +117,13 @@ describe('auth model', () => {
     });
 
     it('generates a token', () => {
-      expect(user.generateToken()).toBe('change me');
+      var token = user.generateToken();
+      expect(token).toBeDefined();
+
+      var verification = jwt.verify(token, 'DeltaV Secret');
+      console.log({ token, verification });
+      expect(verification).toBeDefined();
+      expect(verification.id).toBe(user._id.toString());
     });
   });
 });
