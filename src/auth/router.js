@@ -6,15 +6,27 @@ const authRouter = express.Router();
 import User from './model';
 import auth from './middleware';
 
-// TODO: POST /signup
-// body: { username: 'john', password: 'hancock' }
-// response: generated token
-
-// TODO: GET /signin
-authRouter.get('/signin', auth, (req, res) => {
-  res.send(res.token);
+authRouter.post('/signup', (req, res, next) => {
+  let user = new User(req.body);
+  user.save()
+    .then(user => {
+      res.send({
+        token: user.generateToken(),
+      });
+    })
+    .catch(next);
 });
 
-// TODO: POST /signin
+authRouter.get('/signin', auth, (req, res) => {
+  res.send({
+    token: res.token,
+  });
+});
+
+authRouter.post('/signin', auth, (req, res) => {
+  res.send({
+    token: res.token,
+  });
+});
 
 export default authRouter;

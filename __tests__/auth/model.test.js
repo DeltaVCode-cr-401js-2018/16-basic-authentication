@@ -1,6 +1,7 @@
 'use strict';
 
 import User from '../../src/auth/model';
+import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
 
 const mongoConnect = require('../../src/util/mongo-connect');
@@ -116,7 +117,36 @@ describe('auth model', () => {
     });
 
     it('generates a token', () => {
-      expect(user.generateToken()).toBe('change me');
+      var token = user.generateToken();
+      expect(token).toBeDefined();
+
+      var verification = jwt.verify(token, 'DeltaV Secret');
+      console.log({ token, verification });
+      expect(verification).toBeDefined();
+      expect(verification.id).toBe(user._id.toString());
+    });
+
+    describe('User.authorize()', () => {
+      it('can get user from valid token', () => {
+        var token = user.generateToken();
+
+        return User.authorize(token)
+          .then(authedUser => {
+            expect(authedUser).toBeDefined();
+            expect(authedUser._id).toEqual(user._id);
+          });
+      });
+
+      it('resolves with null for invalid token', () => {
+        var token = 'oops';
+
+        return User.authorize(token)
+          .then(authedUser => {
+            expect(authedUser).toBe(null);
+          });
+      });
+
+      // TODO: resolves with null for valid token with id not found
     });
   });
 });
