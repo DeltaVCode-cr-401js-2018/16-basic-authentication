@@ -1,5 +1,11 @@
 'use strict';
 
+const requireAll = require('require-all');
+console.log(requireAll); // This might be a mock!
+
+// Force Jest to not use the mock require-all
+jest.unmock('require-all');
+
 const request = require('supertest');
 
 import app from '../src/app';

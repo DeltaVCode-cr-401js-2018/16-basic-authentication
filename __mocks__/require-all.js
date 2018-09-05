@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (dir) => {
+module.exports = function requireAllMock(dir) {
   if (typeof dir !== 'string') {
     throw new Error('require-all needs dir');
   }
