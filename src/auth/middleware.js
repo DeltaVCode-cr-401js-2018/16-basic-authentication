@@ -35,6 +35,20 @@ export default (req, res, next) => {
         next(err);
       });
   }
+  else if (authHeader.match(/^bearer\s+/i)) {
+    let token = authHeader.replace(/^bearer\s+/i, '');
+    User.authorize(token)
+      .then(user => {
+        if (user) {
+          res.token = token;
+          res.user = user;
+          return next();
+        }
+
+        unauthorized();
+      })
+      .catch(next);
+  }
   else {
     next();
   }

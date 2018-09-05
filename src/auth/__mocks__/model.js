@@ -15,4 +15,14 @@ export default {
 
     return Promise.resolve(null);
   },
+
+  authorize: (token) => {
+    if (token && token.match(/DeltaV/)) {
+      return Promise.resolve({
+        username: 'dahlbyk',
+      });
+    }
+
+    return Promise.resolve(null);
+  },
 };
