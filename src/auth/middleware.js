@@ -3,40 +3,36 @@
 import User from './model';
 
 export default (req, res, next) => {
-  // Step 1: parse Authorization header
   let auth = {};
   let authHeader = req.headers.authorization;
 
-  if (!authHeader) {
+  if(!authHeader){
+    console.log('no auth header');
     return unauthorized();
   }
+  if(authHeader.match(/^basic\s+/i)){
+    let base64Header = authHeader.replace(/^basic\s+/i, '');
+    let base64Buffer = Buffer.from(base64Header, 'base64');
+    let bufferString = base64Buffer.toString();
 
-  if (authHeader.match(/^basic\s+/i)) {
-    let base64header = authHeader.replace(/^basic\s+/i, '');
-    let base64buffer = Buffer.from(base64header, 'base64');
-    let bufferString = base64buffer.toString();
-
-    let [username,password] = bufferString.split(':', 2);
-    auth = { username, password };
+    let [username, password] = bufferString.split(':', 2);
+    auth = {username, password};
+    console.log({ base64Header, base64Buffer, bufferString, auth });
 
     User.authenticate(auth)
-      .then(user => {
-        if (user) {
+      .then(user =>{
+        console.log(user);
+        if(user){
           res.token = user.generateToken();
           return next();
         }
-
         unauthorized();
       });
-  }
-  else {
+  } else{
     next();
   }
-
-  function unauthorized() {
-    // Nudge browser to ask for username + password
+  function unauthorized(){
     res.setHeader('WWW-Authenticate', 'Basic realm="DeltaV"');
-
     next({
       status: 401,
     });

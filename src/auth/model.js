@@ -5,15 +5,13 @@ import bcrypt from 'bcrypt';
 
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true},
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function(next){
   bcrypt.hash(this.password, 10)
-    .then(hashedPassword => {
-      // Replace plain-text password with hashed version
-      this.password = hashedPassword;
-      // Continue to perform save
+    .then(hashedPass =>{
+      this.password = hashedPass;
       next();
     })
     .catch(err => { throw err; });
@@ -21,21 +19,17 @@ userSchema.pre('save', function(next) {
 
 userSchema.methods.comparePassword = function(password) {
   return bcrypt.compare(password, this.password)
-    // If valid, resolve with this,
-    // otherwise pretend user does not exist
     .then(valid => valid ? this : null);
 };
 
-userSchema.statics.authenticate = function(auth) {
-  // MongoDB query by username
+userSchema.statics.authenticate = function(auth){
   let query = { username: auth.username };
-
+  console.log(auth.username, auth.password);
   return this.findOne(query)
     .then(user => user && user.comparePassword(auth.password));
 };
 
-userSchema.methods.generateToken = function () {
-  // TODO: generate a real token
+userSchema.methods.generateToken = function(){
   return 'change me';
 };
 
