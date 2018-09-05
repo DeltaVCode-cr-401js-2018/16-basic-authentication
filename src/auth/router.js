@@ -12,15 +12,18 @@ authRouter.get('/signin', auth, (req, res)=>{
   return;
 });
 
-authRouter.post('/signup', (req, res)=>{
+authRouter.post('/signup', (req, res, next)=>{
   let user = new User({
     username: req.body.username,
     password: req.body.password,
   });
-  return user.save()
+  user.save()
     .then(user=>{
-      res.send(user);
-    });
+      res.send({
+        token: user.generateToken(),
+      });
+    })
+    .catch(next);
   
 });
 

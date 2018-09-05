@@ -2,6 +2,8 @@
 
 import User from '../../src/auth/model';
 import uuid from 'uuid';
+import jwt from 'jsonwebtoken';
+//import { request } from 'https';
 
 const mongoConnect = require('../../src/util/mongo-connect');
 
@@ -98,7 +100,8 @@ describe('auth routes', () => {
       return user.save();
     });
     it('generates a token', () => {
-      expect(user.generateToken()).toBe('change me');
+      let token = user.generateToken();
+      expect(jwt.verify(token, 'DeltaV Secret').id).toBe(user._id.toString());
     });
   });
 });
