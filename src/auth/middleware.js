@@ -50,7 +50,7 @@ export default (req, res, next) => {
       .catch(next);
   }
   else {
-    next();
+    unauthorized();
   }
 
   function unauthorized() {

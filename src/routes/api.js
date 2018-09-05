@@ -18,6 +18,9 @@ router.use(auth);
 
 // Get all notes
 router.get('/:model', (req, res, next) => {
+  // TODO: limit to current user's stuff, e.g.
+  // req.Model.find({ userId: req.user._id })
+  // TODO: if you want to get fancy, check if Model schema has a userId first
   req.Model.find({})
     .then(models => {
       res.json(models);
