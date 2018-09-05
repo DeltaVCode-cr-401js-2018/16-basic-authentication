@@ -16,6 +16,23 @@ describe('auth routes', () => {
     await mongoConnect(MONGODB_URI);
   });
 
+  describe('signup', () => {
+    it('creates user from valid body', () => {
+      const password = uuid();
+
+      return request
+        .post('/signup')
+        .send({ username: uuid(), password })
+        .expect(200)
+        .expect(response => {
+          expect(response.body).toBeDefined();
+          expect(response.body.token).toBeDefined();
+        });
+    });
+
+    // TODO: tests for error conditions (invalid body, etc)
+  });
+
   describe('signin', () => {
     let password = uuid();
     let user;
