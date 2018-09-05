@@ -9,6 +9,10 @@ import modelFinder from '../middleware/models';
 // Only populate req.Model for API requests
 router.param('model', modelFinder);
 
+// Only API should allow cross-origin requests
+import cors from 'cors';
+router.use(cors());
+
 import auth from '../auth/middleware';
 router.use(auth);
 
@@ -21,7 +25,8 @@ router.get('/:model', (req, res, next) => {
 });
 
 // Create a note
-router.post('/:model', (req, res, next) => {
+// Explicitly require auth for POST
+router.post('/:model', auth, (req, res, next) => {
   if (!req.body) {
     res.send(400);
     res.end();
@@ -69,7 +74,8 @@ router.get('/:model/:id', (req, res, next) => {
     });
 });
 
-router.delete('/:model/:id', (req, res, next) => {
+// Explicitly require auth for DELETE
+router.delete('/:model/:id', auth, (req, res, next) => {
   req.Model.findByIdAndRemove(req.params.id)
     .then(removed => {
       // Not found, continue on Express middleware pipeline
