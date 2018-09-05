@@ -22,7 +22,7 @@ import authRouter from './auth/router';
 app.use(authRouter);
 
 import apiRouter from './routes/api';
-app.use(apiRouter);
+app.use('/api', apiRouter);
 
 app.use(json404);
 app.use(errorMiddleware);

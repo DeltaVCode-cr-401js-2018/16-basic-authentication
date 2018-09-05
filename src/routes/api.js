@@ -10,7 +10,7 @@ import modelFinder from '../middleware/models';
 router.param('model', modelFinder);
 
 // Get all notes
-router.get('/api/:model', (req, res, next) => {
+router.get('/:model', (req, res, next) => {
   req.Model.find({})
     .then(models => {
       res.json(models);
@@ -18,7 +18,7 @@ router.get('/api/:model', (req, res, next) => {
 });
 
 // Create a note
-router.post('/api/:model', (req, res, next) => {
+router.post('/:model', (req, res, next) => {
   if (!req.body) {
     res.send(400);
     res.end();
@@ -37,7 +37,7 @@ router.post('/api/:model', (req, res, next) => {
 });
 
 // Get an individual note
-router.get('/api/:model/:id', (req, res, next) => {
+router.get('/:model/:id', (req, res, next) => {
   return req.Model.findById(req.params.id)
     .then(model => {
       if (model === null) {
@@ -66,7 +66,7 @@ router.get('/api/:model/:id', (req, res, next) => {
     });
 });
 
-router.delete('/api/:model/:id', (req, res, next) => {
+router.delete('/:model/:id', (req, res, next) => {
   req.Model.findByIdAndRemove(req.params.id)
     .then(removed => {
       // Not found, continue on Express middleware pipeline
