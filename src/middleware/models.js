@@ -2,7 +2,7 @@
 
 const debug = require('debug')('app/middleware/models');
 
-const models = require('require-all')(`${__dirname}/../../models`);
+const models = require('require-all')(`${__dirname}/../models`);
 const modelLookup = {};
 Object.values(models)
   .map(module => module.default)
