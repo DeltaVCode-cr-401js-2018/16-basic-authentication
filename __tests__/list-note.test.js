@@ -12,17 +12,37 @@ import app from '../src/app';
 import Note from '../src/models/note';
 import List from '../src/models/list';
 
+import uuid from 'uuid';
+import User from '../src/auth/model';
+
 const mongoConnect = require('../src/util/mongo-connect');
 
 const MONGODB_URI = process.env.MONGODB_URI ||
   'mongodb://localhost/401-2018-notes';
 
 describe('api/', () => {
+  let token;
   beforeAll(() => {
-    return mongoConnect(MONGODB_URI);
+    return mongoConnect(MONGODB_URI)
+      .then(() => {
+        let testUser = new User({
+          username: 'api-test-' + uuid(),
+          password: 'whatever',
+        });
+        return testUser.save()
+          .then(savedUser => {
+            token = savedUser.generateToken();
+          });
+      });
   });
 
   describe('notes', () => {
+    it('is unauthorized without valid Authorization', () => {
+      return request(app)
+        .get('/api/notes')
+        .expect(401);
+    });
+
     it('can get /api/notes', () => {
       var notes = [
         new Note({ title: 'test 1', content: 'uno' }),
@@ -35,6 +55,7 @@ describe('api/', () => {
       ).then(savedNotes => {
         return request(app)
           .get('/api/notes')
+          .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .expect('Content-Type', 'application/json; charset=utf-8')
           .expect(({ body }) => {
@@ -54,6 +75,7 @@ describe('api/', () => {
         .then(saved => {
           return request(app)
             .get(`/api/notes/${saved._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(200)
             .expect('Content-Type', 'application/json; charset=utf-8')
             .expect(({ body }) => {
@@ -65,18 +87,21 @@ describe('api/', () => {
     it('returns 404 for GET /api/notes/:id with invalid id', () => {
       return request(app)
         .get('/api/notes/oops')
+        .set('Authorization', `Bearer ${token}`)
         .expect(404);
     });
 
     it('returns 404 for GET /api/notes/:id with valid but missing id', () => {
       return request(app)
         .get('/api/notes/deadbeefdeadbeefdeadbeef')
+        .set('Authorization', `Bearer ${token}`)
         .expect(404);
     });
 
     it('returns 400 for POST /api/notes without body', () => {
       return request(app)
         .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
         .set('Content-Type', 'application/json; charset=utf-8')
         .send('this is not json')
         .expect(400);
@@ -85,6 +110,7 @@ describe('api/', () => {
     it('returns 400 for POST /api/notes with empty body', () => {
       return request(app)
         .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
         .send({})
         .expect(400)
         .expect(response => {
@@ -96,6 +122,7 @@ describe('api/', () => {
     it('can POST /api/notes to create note', () => {
       return request(app)
         .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
         .send({ title: 'Testing', content: 'It works!' })
         .expect(200)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -115,6 +142,7 @@ describe('api/', () => {
           .then(() => {
             return request(app)
               .get(`/api/notes/${testNote._id}`)
+              .set('Authorization', `Bearer ${token}`)
               .expect(200)
               .expect(response => {
                 expect(response.body._id).toEqual(testNote._id.toString());
@@ -126,6 +154,7 @@ describe('api/', () => {
         let resourcePath = `/api/notes/${testNote._id}`;
         return request(app)
           .delete(resourcePath)
+          .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .expect('Content-Type', 'application/json; charset=utf-8')
           .expect({ message: `ID ${testNote._id} was deleted` })
@@ -133,6 +162,7 @@ describe('api/', () => {
             console.log('resource deleted! ' + resourcePath);
             return request(app)
               .get(resourcePath)
+              .set('Authorization', `Bearer ${token}`)
               .expect(404)
               .expect(response => {
                 console.log(response);
@@ -143,12 +173,14 @@ describe('api/', () => {
       it('returns 404 with invalid id', () => {
         return request(app)
           .delete('/api/notes/oops')
+          .set('Authorization', `Bearer ${token}`)
           .expect(404);
       });
 
       it('returns 404 with valid but missing id', () => {
         return request(app)
           .delete('/api/notes/deadbeefdeadbeefdeadbeef')
+          .set('Authorization', `Bearer ${token}`)
           .expect(404);
       });
     });
@@ -168,6 +200,7 @@ describe('api/', () => {
       };
       return request(app)
         .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
         .send(noteBody)
         .expect(200)
         .expect(response => {
@@ -179,6 +212,7 @@ describe('api/', () => {
 
           return request(app)
             .get(`/api/lists/${testList._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(200)
             .expect(response => {
               let list = response.body;

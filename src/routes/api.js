@@ -9,6 +9,9 @@ import modelFinder from '../middleware/models';
 // Only populate req.Model for API requests
 router.param('model', modelFinder);
 
+import auth from '../auth/middleware';
+router.use(auth);
+
 // Get all notes
 router.get('/:model', (req, res, next) => {
   req.Model.find({})
