@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
   res.send('<html><body><h1>DeltaV</h1></body></html>');
 });
 
+import authRouter from './auth/router';
+app.use(authRouter);
+
 
 app.use(json404);
 app.use(errorMiddleware);
