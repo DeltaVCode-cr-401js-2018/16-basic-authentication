@@ -37,4 +37,17 @@ userSchema.methods.generateToken = function(){
   return jwt.sign(payload, process.env.SECRET || 'DeltaV Secret');
 };
 
+userSchema.statics.authorize= function(token){
+  try{
+    let payload = jwt.verify(token, process.env.SECRET || 'DeltaV Secret');
+    return this.findById(payload.id)
+      .then(user=>{
+        return user;
+      });
+  }
+  catch(err){
+    return Promise.resolve(null);
+  }
+};
+
 export default mongoose.model('users', userSchema);

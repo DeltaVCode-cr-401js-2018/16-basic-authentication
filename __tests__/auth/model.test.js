@@ -103,5 +103,25 @@ describe('auth routes', () => {
       let token = user.generateToken();
       expect(jwt.verify(token, 'DeltaV Secret').id).toBe(user._id.toString());
     });
+
+    describe('User.authorize()', ()=>{
+      it('can verify a token with User.authorize()', ()=>{
+        var token = user.generateToken();
+        return User.authorize(token)
+          .then(authUser =>{
+            expect(authUser).toBeDefined();
+            expect(authUser._id).toEqual(user._id);
+          });
+      });
+      it('resolves with null for invalid token', ()=>{
+        var token = 'no';
+        return User.authorize(token)
+          .then(authUser =>{
+            expect(authUser).toBe(null);
+          });
+      });
+    });
+
   });
+    
 });

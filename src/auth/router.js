@@ -24,7 +24,12 @@ authRouter.post('/signup', (req, res, next)=>{
       });
     })
     .catch(next);
-  
+});
+
+authRouter.post('/signin', auth, (req, res) => {
+  res.send({
+    token: res.token,
+  });
 });
 
 export default authRouter;
