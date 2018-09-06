@@ -58,4 +58,18 @@ describe('auth routes', () => {
         .expect(401);
     });
   });
+
+  describe('login', () => {
+    it('/github redirects to GitHub', () => {
+      var gitHubUrl = 'https://github.com/login/oauth/authorize';
+
+      return request
+        .get('/login/github')
+        .expect(302)
+        .expect(response => {
+          expect(response.headers.location)
+            .toMatch(gitHubUrl);
+        });
+    });
+  });
 });
