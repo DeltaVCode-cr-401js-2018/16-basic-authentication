@@ -7,12 +7,12 @@ module.exports = (dir)=> {
 
 
   return {
-    'foo': { default: fakeRoute('foo', 'foo-route') },
-    'bar': { default: fakeRoute() },
+    'foo': { default: fakeModel('foo', 'foo-route') },
+    'bar': { default: fakeModel('bar') },
   };
 };
 
-function fakeRoute(modelName, route) {
+function fakeModel(modelName, route) {
   class Fake {
     constructor() {
 
