@@ -2,6 +2,7 @@
 
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
@@ -30,7 +31,23 @@ userSchema.statics.authenticate = function(auth){
 };
 
 userSchema.methods.generateToken = function(){
-  return 'change me';
+  const payload = {
+    id: this._id,
+  };
+  return jwt.sign(payload, process.env.SECRET || 'DeltaV Secret');
+};
+
+userSchema.statics.authorize= function(token){
+  try{
+    let payload = jwt.verify(token, process.env.SECRET || 'DeltaV Secret');
+    return this.findById(payload.id)
+      .then(user=>{
+        return user;
+      });
+  }
+  catch(err){
+    return Promise.resolve(null);
+  }
 };
 
 export default mongoose.model('users', userSchema);

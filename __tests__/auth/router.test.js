@@ -39,4 +39,18 @@ describe('auth routes', () => {
         .expect(401);
     });
   });
+  describe('signup', ()=>{
+    it('creates user from valid body', ()=>{
+      const password = uuid();
+
+      return request
+        .post('/signup')
+        .send({ username: uuid(), password })
+        .expect(200)
+        .expect(response =>{
+          expect(response.body).toBeDefined();
+          expect(response.body.token).toBeDefined();
+        });
+    });
+  });
 });

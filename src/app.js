@@ -2,14 +2,14 @@
 
 import express from 'express';
 import morgan from 'morgan';
-import cors from 'cors';
+
 
 import errorMiddleware from './middleware/error';
 import json404 from './middleware/json-404';
 
 const app = module.exports = express();
 
-app.use(cors());
+
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
 
 import authRouter from './auth/router';
 app.use(authRouter);
+
+import apiRouter from './api/api';
+app.use('/api/v1', apiRouter);
 
 app.use(json404);
 app.use(errorMiddleware);
