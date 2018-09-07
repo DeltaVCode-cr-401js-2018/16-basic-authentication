@@ -8,14 +8,14 @@ jest.unmock('require-all');
 
 const request = require('supertest');
 
-import app from '../src/app';
-import Note from '../src/models/note';
-import List from '../src/models/list';
+import app from '../../src/app';
+import Note from '../../src/models/note';
+import List from '../../src/models/list';
 
 import uuid from 'uuid';
-import User from '../src/auth/model';
+import User from '../../src/auth/model';
 
-const mongoConnect = require('../src/util/mongo-connect');
+const mongoConnect = require('../../src/util/mongo-connect');
 
 const MONGODB_URI = process.env.MONGODB_URI ||
   'mongodb://localhost/401-2018-notes';

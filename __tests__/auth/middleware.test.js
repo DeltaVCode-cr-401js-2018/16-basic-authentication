@@ -21,7 +21,8 @@ describe('Auth Middleware', () => {
 
     // auth = middleware, which receives request, response, next
     auth(req, res, () => {
-      expect(res.token).toBe('dahlbyk token!');
+      expect(req.token).toBe('dahlbyk token!');
+      expect(req.user).toBeDefined();
       done();
     });
   });
@@ -33,6 +34,10 @@ describe('Auth Middleware', () => {
     auth(req, res, (err) => {
       expect(err).toBeDefined();
       expect(err.status).toBe(401);
+
+      expect(req.token).not.toBeDefined();
+      expect(req.user).not.toBeDefined();
+
       done();
     });
   });
@@ -48,6 +53,10 @@ describe('Auth Middleware', () => {
     auth(req, res, (err) => {
       expect(err).toBeDefined();
       expect(err.status).toBe(401);
+
+      expect(req.token).not.toBeDefined();
+      expect(req.user).not.toBeDefined();
+
       done();
     });
   });
@@ -66,8 +75,10 @@ describe('Auth Middleware', () => {
 
       auth(req, res, (err) => {
         expect(err).not.toBeDefined();
-        expect(res.token).toBe(token);
-        expect(res.user).toBeDefined();
+
+        expect(req.token).toBe(token);
+        expect(req.user).toBeDefined();
+
         done();
       });
     });
@@ -85,8 +96,8 @@ describe('Auth Middleware', () => {
         expect(err).toBeDefined();
         expect(err.status).toBe(401);
 
-        expect(res.token).not.toBeDefined();
-        expect(res.user).not.toBeDefined();
+        expect(req.token).not.toBeDefined();
+        expect(req.user).not.toBeDefined();
 
         done();
       });

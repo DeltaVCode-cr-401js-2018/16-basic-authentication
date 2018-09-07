@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('auth/middleware');
+const debug = require('debug')('app:auth/middleware');
 import User from './model';
 
 export default (req, res, next) => {
@@ -25,7 +25,8 @@ export default (req, res, next) => {
     User.authenticate(auth)
       .then(user => {
         if (user) {
-          res.token = user.generateToken();
+          req.token = user.generateToken();
+          req.user = user;
           return next();
         }
 
@@ -40,8 +41,8 @@ export default (req, res, next) => {
     User.authorize(token)
       .then(user => {
         if (user) {
-          res.token = token;
-          res.user = user;
+          req.token = token;
+          req.user = user;
           return next();
         }
 

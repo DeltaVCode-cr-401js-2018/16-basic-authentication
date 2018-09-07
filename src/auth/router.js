@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('app/auth/router');
+const debug = require('debug')('app:auth/router');
 import superagent from 'superagent';
 
 import express from 'express';
@@ -22,13 +22,13 @@ authRouter.post('/signup', (req, res, next) => {
 
 authRouter.get('/signin', auth, (req, res) => {
   res.send({
-    token: res.token,
+    token: req.token,
   });
 });
 
 authRouter.post('/signin', auth, (req, res) => {
   res.send({
-    token: res.token,
+    token: req.token,
   });
 });
 

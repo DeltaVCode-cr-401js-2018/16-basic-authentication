@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('app/middleware/error');
+const debug = require('debug')('app:middleware/error');
 
 export default (err, req, res, next) => {
   if (err.name === 'CastError') {
@@ -10,13 +10,14 @@ export default (err, req, res, next) => {
 
   if (err.name === 'ValidationError') {
     res.statusCode = 400;
+    debug('ValidationError', err.message);
     res.json({
       message: err.message,
     });
     return;
   }
 
-  debug(err);
+  console.error(err);
 
   if (req.headers['accept'] !== 'application/json') {
     next(err);
