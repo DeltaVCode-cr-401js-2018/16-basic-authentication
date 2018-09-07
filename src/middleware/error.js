@@ -10,6 +10,7 @@ export default (err, req, res, next) => {
 
   if (err.name === 'ValidationError') {
     res.statusCode = 400;
+    debug('ValidationError', err.message);
     res.json({
       message: err.message,
     });

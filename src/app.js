@@ -20,7 +20,8 @@ import authRouter from './auth/router';
 app.use(authRouter);
 
 import apiRouter from './routes/api';
-app.use('/api', apiRouter);
+import picRouter from './routes/pic';
+app.use('/api', apiRouter, picRouter);
 
 app.use(json404);
 app.use(errorMiddleware);
