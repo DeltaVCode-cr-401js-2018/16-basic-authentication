@@ -16,12 +16,18 @@ router.use(cors());
 import auth from '../auth/middleware';
 router.use(auth);
 
+function withUserID(req, query) {
+  if (req.user && req.Model.schema.paths.hasOwnProperty('userID')) {
+    query.userID = req.user._id;
+  }
+  return query;
+}
+
 // Get all notes
 router.get('/:model', (req, res, next) => {
-  // TODO: limit to current user's stuff, e.g.
-  // req.Model.find({ userId: req.user._id })
-  // TODO: if you want to get fancy, check if Model schema has a userId first
-  req.Model.find({})
+  let query = withUserID(req, {});
+
+  req.Model.find(query)
     .then(models => {
       res.json(models);
     });
@@ -36,7 +42,8 @@ router.post('/:model', auth, (req, res, next) => {
     return;
   }
 
-  var newModel = new req.Model(req.body);
+  const doc = withUserID(req, { ...req.body });
+  var newModel = new req.Model(doc);
   newModel.save()
     .then(saved => {
       return req.Model.findById(saved._id);
@@ -49,7 +56,9 @@ router.post('/:model', auth, (req, res, next) => {
 
 // Get an individual note
 router.get('/:model/:id', (req, res, next) => {
-  return req.Model.findById(req.params.id)
+  const query = withUserID(req, { _id: req.params.id });
+
+  req.Model.findOne(query)
     .then(model => {
       if (model === null) {
         // 404 Option 1:
@@ -80,7 +89,7 @@ router.get('/:model/:id', (req, res, next) => {
 router.put('/:model/:id', auth, (req, res, next) => {
   // discard readonly _id and _v
   const { _id, _v, ...update } = req.body;
-  const query = { _id: req.params.id };
+  const query = withUserID(req, { _id: req.params.id });
 
   req.Model.findOneAndUpdate(query, update, { new: true })
     .then(gallery => gallery ? res.json(gallery) : next())
@@ -89,7 +98,9 @@ router.put('/:model/:id', auth, (req, res, next) => {
 
 // Explicitly require auth for DELETE
 router.delete('/:model/:id', auth, (req, res, next) => {
-  req.Model.findByIdAndRemove(req.params.id)
+  const query = withUserID(req, { _id: req.params.id });
+
+  req.Model.findOneAndRemove(query)
     .then(removed => {
       // Not found, continue on Express middleware pipeline
       if (!removed) {
