@@ -22,13 +22,13 @@ authRouter.post('/signup', (req, res, next) => {
 
 authRouter.get('/signin', auth, (req, res) => {
   res.send({
-    token: res.token,
+    token: req.token,
   });
 });
 
 authRouter.post('/signin', auth, (req, res) => {
   res.send({
-    token: res.token,
+    token: req.token,
   });
 });
 

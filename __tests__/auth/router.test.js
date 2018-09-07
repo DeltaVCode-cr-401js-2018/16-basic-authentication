@@ -44,11 +44,24 @@ describe('auth routes', () => {
       return user.save();
     });
 
-    it('returns 200 for a good login', () => {
+    it('GET returns 200 for a good login', () => {
       return request
         .get('/signin')
         .auth(user.username, password)
-        .expect(200);
+        .expect(200)
+        .expect(({ body }) => {
+          expect(body).toHaveProperty('token');
+        });
+    });
+
+    it('POST returns 200 for a good login', () => {
+      return request
+        .post('/signin')
+        .auth(user.username, password)
+        .expect(200)
+        .expect(({ body }) => {
+          expect(body).toHaveProperty('token');
+        });
     });
 
     it('returns 401 for a bad login', () => {
