@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('tests/acceptance/gallery');
+const debug = require('debug')('tests:acceptance/gallery');
 
 const requireAll = require('require-all');
 debug(requireAll); // This might be a mock!

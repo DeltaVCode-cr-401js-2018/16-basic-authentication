@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('app/auth/router');
+const debug = require('debug')('app:auth/router');
 import superagent from 'superagent';
 
 import express from 'express';

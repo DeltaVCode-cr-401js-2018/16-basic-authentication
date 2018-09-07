@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('app/middleware/error');
+const debug = require('debug')('app:middleware/error');
 
 export default (err, req, res, next) => {
   if (err.name === 'CastError') {

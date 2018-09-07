@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('app/middleware/models');
+const debug = require('debug')('app:middleware/models');
 
 const models = require('require-all')(`${__dirname}/../models`);
 const modelLookup = {};

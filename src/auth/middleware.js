@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('auth/middleware');
+const debug = require('debug')('app:auth/middleware');
 import User from './model';
 
 export default (req, res, next) => {

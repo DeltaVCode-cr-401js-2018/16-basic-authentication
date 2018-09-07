@@ -1,5 +1,7 @@
 'use strict';
 
+const debug = require('debug')('app:route/api');
+
 import express from 'express';
 const router = express.Router();
 
@@ -20,6 +22,7 @@ function withUserID(req, query) {
   if (req.user && req.Model.schema.paths.hasOwnProperty('userID')) {
     query.userID = req.user._id;
   }
+  debug(query);
   return query;
 }
 
