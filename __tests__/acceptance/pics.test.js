@@ -75,6 +75,28 @@ describe('Picture Route', () => {
         .expect(404);
     });
 
+    it('should return 400 without fields', async () => {
+      await request
+        .post(`/api/gallery/${testGallery._id}/pic`)
+        .set({ Authorization: `Bearer ${testToken}` })
+        // .field({
+        //   name: examplePic.name,
+        // })
+        .attach('image', examplePic.image)
+        .expect(400);
+    });
+
+    it('should return 400 without file', async () => {
+      await request
+        .post(`/api/gallery/${testGallery._id}/pic`)
+        .set({ Authorization: `Bearer ${testToken}` })
+        .field({
+          name: examplePic.name,
+        })
+        // .attach('image', examplePic.image)
+        .expect(400);
+    });
+
     it('should return a pic for valid id and request', async () => {
       await request
         .post(`/api/gallery/${testGallery._id}/pic`)

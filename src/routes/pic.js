@@ -20,6 +20,16 @@ import del from 'del';
 router.post('/gallery/:id/pic', upload.single('image'), (req, res, next) => {
   debug(`POST /gallery/${req.params.id}/pic`);
 
+  // File not uploaded!
+  if (!req.file) {
+    return next({ status: 400 });
+  }
+
+  // Something went wrong with upload
+  if (!req.file.path) {
+    return next(new Error('file not saved'));
+  }
+
   // Cleanup on Aisle 5; delete temp upload file when response is sent
   res.on('finish', () => {
     debug(`Deleting ${req.file.path}`);
