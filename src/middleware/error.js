@@ -16,7 +16,7 @@ export default (err, req, res, next) => {
     return;
   }
 
-  debug(err);
+  console.error(err);
 
   if (req.headers['accept'] !== 'application/json') {
     next(err);
