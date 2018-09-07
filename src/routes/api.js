@@ -77,6 +77,16 @@ router.get('/:model/:id', (req, res, next) => {
     });
 });
 
+router.put('/:model/:id', auth, (req, res, next) => {
+  // discard readonly _id and _v
+  const { _id, _v, ...update } = req.body;
+  const query = { _id: req.params.id };
+
+  req.Model.findOneAndUpdate(query, update, { new: true })
+    .then(gallery => gallery ? res.json(gallery) : next())
+    .catch(next);
+});
+
 // Explicitly require auth for DELETE
 router.delete('/:model/:id', auth, (req, res, next) => {
   req.Model.findByIdAndRemove(req.params.id)
