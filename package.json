@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
-    "test": "cross-env DEBUG=app/* jest",
+    "test": "cross-env DEBUG=* jest",
     "watch": "cross-env DEBUG=* nodemon ."
   },
   "repository": {
