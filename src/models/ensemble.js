@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 const ensembleSchema = Schema({
   name: { type: String, required: true },
   size: { type: Number, required: true, default: 0 },
-  notes: [
+  instruments: [
     { type: Schema.Types.ObjectId, ref: 'instrument' },
   ],
 });

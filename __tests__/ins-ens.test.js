@@ -80,7 +80,7 @@ describe('api/', () => {
     });
     it('returns 404 for GET /api/v1/instruments/:id with valid but missing id', () => {
       return request(app)
-        .get('/api/v1/instruments/deadbeefdeadbeefdeadbeef')
+        .get('/api/v1/instruments/nothing')
         .set('Authorization', `Bearer ${token}`)
         .expect(404);
     });
@@ -132,7 +132,7 @@ describe('api/', () => {
               });
           });
       });
-      /*it('returns 200 with JSON for successful delete', () => {
+      it('returns 200 with JSON for successful delete', () => {
         let resourcePath = `/api/v1/instruments/${testInstrument._id}`;
         return request(app)
           .delete(resourcePath)
@@ -150,7 +150,7 @@ describe('api/', () => {
                 console.log(response);
               });
           });
-      });*/
+      });
       it('returns 404 with invalid id', () => {
         return request(app)
           .delete('/api/v1/instruments/oops')
@@ -171,9 +171,10 @@ describe('api/', () => {
       testEnsemble = new Ensemble({ name: 'Add instruments to me' });
       return testEnsemble.save();
     });
-    /*it('can create instrument on ensemble', () => {
+    it('can create instrument on ensemble', () => {
       let instrumentBody = {
         name: 'Add me to a ensemble',
+        family: 'test',
         ensemble: testEnsemble._id,
       };
       return request(app)
@@ -200,6 +201,6 @@ describe('api/', () => {
               expect(ensemble.instruments[0]._id).toEqual(instrument._id.toString());
             });
         });
-    });*/
+    });
   });
 }); 
