@@ -65,7 +65,7 @@ router.put('/:model/:_id', (req,res,next)=>{
     .catch(next);
 });
 router.delete('/:model/:_id', auth, (req,res, next)=>{
-  req.Model.findByIdAndRemove(req.params.id)
+  req.Model.findByIdAndRemove(req.params._id)
     .then(removed => {
       if (!removed) {
         return next();
