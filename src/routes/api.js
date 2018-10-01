@@ -16,7 +16,6 @@ import cors from 'cors';
 router.use(cors());
 
 import auth from '../auth/middleware';
-router.use(auth);
 
 function withUserID(req, query) {
   if (req.user && req.Model.schema.paths.hasOwnProperty('userID')) {
