@@ -17,6 +17,15 @@ export default (err, req, res, next) => {
     return;
   }
 
+  if (err.code === 11000) {
+    res.statusCode = 409;
+    debug('Conflict!', err.message);
+    res.json({
+      message: 'This name is taken. Please try again',
+    });
+    return;
+  } 
+
   console.error(err);
 
   if (req.headers['accept'] !== 'application/json') {
