@@ -14,6 +14,9 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+import cors from 'cors';
+app.use(cors());
+
 app.get('/', (req, res) => {
   res.send('<html><body><h1>DeltaV</h1></body></html>');
 });

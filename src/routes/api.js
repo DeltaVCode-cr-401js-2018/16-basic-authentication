@@ -11,10 +11,6 @@ import modelFinder from '../middleware/models';
 // Only populate req.Model for API requests
 router.param('model', modelFinder);
 
-// Only API should allow cross-origin requests
-import cors from 'cors';
-router.use(cors());
-
 import auth from '../auth/middleware';
 
 function withUserID(req, query) {
