@@ -4,9 +4,9 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
-    "test": "cross-env DEBUG=* jest",
-    "watch": "cross-env DEBUG=* nodemon ."
+    "start": "cross-env DEBUG=app:* node .",
+    "test": "cross-env DEBUG=test:* jest",
+    "watch": "cross-env DEBUG=app:* nodemon ."
   },
   "repository": {
     "type": "git",
