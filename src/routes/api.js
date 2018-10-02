@@ -90,6 +90,7 @@ router.get('/:model/:id', (req, res, next) => {
 
 router.put('/:model/:id', auth, (req, res, next) => {
   // discard readonly _id and _v
+  // eslint-disable-next-line no-unused-vars
   const { _id, _v, ...update } = req.body;
   const query = withUserID(req, { _id: req.params.id });
 
