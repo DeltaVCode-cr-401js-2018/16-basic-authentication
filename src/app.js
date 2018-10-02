@@ -2,6 +2,7 @@
 
 import express from 'express';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 import errorMiddleware from './middleware/error';
 import json404 from './middleware/json-404';
@@ -9,6 +10,7 @@ import json404 from './middleware/json-404';
 const app = module.exports = express();
 
 app.use(morgan('tiny'));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

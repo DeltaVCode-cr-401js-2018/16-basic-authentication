@@ -10,7 +10,7 @@ export default (req, res, next) => {
   debug({ authHeader });
 
   if (!authHeader) {
-    return unauthorized();
+    return checkCookie();
   }
 
   if (authHeader.match(/^basic\s+/i)) {
@@ -30,7 +30,7 @@ export default (req, res, next) => {
           return next();
         }
 
-        unauthorized();
+        checkCookie();
       })
       .catch(err => {
         next(err);
@@ -46,12 +46,34 @@ export default (req, res, next) => {
           return next();
         }
 
-        unauthorized();
+        checkCookie();
       })
       .catch(next);
   }
   else {
-    unauthorized();
+    checkCookie();
+  }
+
+  function checkCookie() {
+    // No Auth header? Check cookie instead!
+    if (req.cookies['X-Token']) {
+      let token = req.cookies['X-Token'];
+      User.authorize(token)
+        .then(user => {
+          if (user) {
+            debug('Authorized with cookie!');
+            req.token = token;
+            req.user = user;
+            return next();
+          }
+
+          unauthorized();
+        })
+        .catch(next);
+    }
+    else {
+      unauthorized();
+    }
   }
 
   function unauthorized() {
