@@ -114,7 +114,7 @@ describe('Gallery Routes', () => {
             .set({
               Authorization: `Bearer ${hackerToken}`,
             })
-            .expect(404);
+            .expect(200);
         });
       });
     });
