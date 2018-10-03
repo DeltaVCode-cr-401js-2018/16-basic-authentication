@@ -43,6 +43,14 @@ function setAuthCookie(res, token) {
   res.cookie('X-Token', token, { maxAge: 900000 });
 }
 
+authRouter.post('/signout', auth, (req, res) => {
+  setAuthCookie(res, '');
+
+  res.send({
+    status: 'success',
+  });
+});
+
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'github_id';
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5000';
 // OAuth!
