@@ -9,6 +9,8 @@ import json404 from './middleware/json-404';
 
 const app = module.exports = express();
 
+app.set('etag', false);
+
 app.use(morgan('tiny'));
 app.use(cookieParser());
 app.use(express.json());
