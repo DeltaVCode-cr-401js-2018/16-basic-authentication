@@ -11,6 +11,7 @@ const noteSchema = Schema({
   created: { type: Date, required: true, default: Date.now },
   completed: { type: Boolean, required: true, default: false },
   list: { type: Schema.Types.ObjectId, ref: 'list' },
+  userID: { type: Schema.Types.ObjectId, ref: 'users', required: true },
 });
 
 noteSchema.pre('findOne', function(next) {

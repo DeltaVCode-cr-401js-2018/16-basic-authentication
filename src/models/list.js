@@ -8,6 +8,7 @@ const listSchema = Schema({
   notes: [
     { type: Schema.Types.ObjectId, ref: 'note' },
   ],
+  userID: { type: Schema.Types.ObjectId, ref: 'users', required: true },
 });
 
 listSchema.pre('findOne', function (next) {
