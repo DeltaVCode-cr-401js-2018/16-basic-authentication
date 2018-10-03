@@ -22,7 +22,7 @@ function withUserID(req, query) {
 }
 
 // Get all notes
-router.get('/:model', (req, res, next) => {
+router.get('/:model', auth, (req, res, next) => {
   let query = withUserID(req, {});
 
   req.Model.find(query)
