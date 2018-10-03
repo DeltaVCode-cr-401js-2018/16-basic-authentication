@@ -51,6 +51,13 @@ authRouter.post('/signout', auth, (req, res) => {
   });
 });
 
+authRouter.get('/user', auth, (req, res) => {
+  res.send({
+    ...req.user.toObject(),
+    capabilities: req.user.capabilities,
+  });
+});
+
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'github_id';
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5000';
 // OAuth!
