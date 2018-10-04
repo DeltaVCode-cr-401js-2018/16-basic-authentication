@@ -52,10 +52,7 @@ authRouter.post('/signout', auth, (req, res) => {
 });
 
 authRouter.get('/user', auth, (req, res) => {
-  res.send({
-    ...req.user.toObject(),
-    capabilities: req.user.capabilities,
-  });
+  res.send(req.user);
 });
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'github_id';

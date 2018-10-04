@@ -16,8 +16,9 @@ const userSchema = new Schema({
   role: { type: String, required: true, default: 'user', enum: Object.keys(capabilities) },
 });
 
-userSchema.post('init', function() {
-  this.capabilities = capabilities[this.role] || [];
+userSchema.set('toJSON', { virtuals: true });
+userSchema.virtual('capabilities').get(function() {
+  return capabilities[this.role] || [];
 });
 
 userSchema.pre('save', function(next) {
