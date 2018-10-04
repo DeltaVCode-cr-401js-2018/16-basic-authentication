@@ -13,23 +13,46 @@ authRouter.post('/signup', (req, res, next) => {
   let user = new User(req.body);
   user.save()
     .then(user => {
+      const token = user.generateToken();
+      setAuthCookie(res, token);
+
       res.send({
-        token: user.generateToken(),
+        token,
       });
     })
     .catch(next);
 });
 
 authRouter.get('/signin', auth, (req, res) => {
+  setAuthCookie(res, req.token);
+
   res.send({
     token: req.token,
   });
 });
 
 authRouter.post('/signin', auth, (req, res) => {
+  setAuthCookie(res, req.token);
+
   res.send({
     token: req.token,
   });
+});
+
+function setAuthCookie(res, token) {
+  res.cookie('X-Token', token, { maxAge: 900000 });
+}
+
+authRouter.post('/signout', auth, (req, res) => {
+  setAuthCookie(res, '');
+
+  res.send({
+    status: 'success',
+  });
+});
+
+authRouter.get('/user', auth, (req, res) => {
+  res.send(req.user);
 });
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'github_id';

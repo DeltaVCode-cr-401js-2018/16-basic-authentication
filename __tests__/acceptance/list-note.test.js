@@ -37,10 +37,10 @@ describe('api/', () => {
   });
 
   describe('notes', () => {
-    it('is unauthorized without valid Authorization', () => {
+    it('is authorized without valid Authorization', () => {
       return request(app)
         .get('/api/notes')
-        .expect(401);
+        .expect(200);
     });
 
     it('can get /api/notes', () => {

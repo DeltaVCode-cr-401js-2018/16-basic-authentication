@@ -11,12 +11,7 @@ import modelFinder from '../middleware/models';
 // Only populate req.Model for API requests
 router.param('model', modelFinder);
 
-// Only API should allow cross-origin requests
-import cors from 'cors';
-router.use(cors());
-
 import auth from '../auth/middleware';
-router.use(auth);
 
 function withUserID(req, query) {
   if (req.user && req.Model.schema.paths.hasOwnProperty('userID')) {
@@ -91,6 +86,7 @@ router.get('/:model/:id', (req, res, next) => {
 
 router.put('/:model/:id', auth, (req, res, next) => {
   // discard readonly _id and _v
+  // eslint-disable-next-line no-unused-vars
   const { _id, _v, ...update } = req.body;
   const query = withUserID(req, { _id: req.params.id });
 

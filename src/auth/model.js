@@ -4,9 +4,21 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+const capabilities = {
+  user: ['read'],
+  editor: ['read','update'],
+  admin: ['create','read','update','delete'],
+};
+
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: { type: String, required: true, default: 'user', enum: Object.keys(capabilities) },
+});
+
+userSchema.set('toJSON', { virtuals: true });
+userSchema.virtual('capabilities').get(function() {
+  return capabilities[this.role] || [];
 });
 
 userSchema.pre('save', function(next) {

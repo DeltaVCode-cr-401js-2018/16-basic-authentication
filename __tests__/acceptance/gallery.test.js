@@ -108,13 +108,13 @@ describe('Gallery Routes', () => {
           hacker = await new User({ username: uuid(), password: 'hack' }).save();
           hackerToken = hacker.generateToken();
         });
-        it('should return 404', () => {
+        it('should return 200', () => {
           return request
             .get(`/api/gallery/${testGallery._id}`)
             .set({
               Authorization: `Bearer ${hackerToken}`,
             })
-            .expect(404);
+            .expect(200);
         });
       });
     });

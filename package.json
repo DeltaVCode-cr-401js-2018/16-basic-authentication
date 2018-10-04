@@ -4,9 +4,9 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
-    "test": "cross-env DEBUG=* jest",
-    "watch": "cross-env DEBUG=* nodemon ."
+    "start": "cross-env DEBUG=app:* node .",
+    "test": "cross-env DEBUG=test:* jest",
+    "watch": "cross-env DEBUG=app:* nodemon ."
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "babel-eslint": "^8.2.6",
     "babel-register": "^6.26.0",
     "bcrypt": "^3.0.0",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "debug": "^3.1.0",
     "del": "^3.0.0",

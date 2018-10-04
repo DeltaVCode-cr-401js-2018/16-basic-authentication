@@ -5,6 +5,8 @@ const debug = require('debug')('app:route/pic');
 import express from 'express';
 const router = express.Router();
 
+import auth from '../auth/middleware';
+
 export default router;
 
 import Pic from '../models/pic';
@@ -32,7 +34,7 @@ const s3uploadAsync = (options) => {
   });
 };
 
-router.post('/gallery/:id/pic', upload.single('image'), (req, res, next) => {
+router.post('/gallery/:id/pic', auth, upload.single('image'), (req, res, next) => {
   debug(`POST /gallery/${req.params.id}/pic`);
 
   // File not uploaded!

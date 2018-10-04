@@ -149,4 +149,54 @@ describe('auth model', () => {
       // TODO: resolves with null for valid token with id not found
     });
   });
+
+  describe('roles', () => {
+    it('defaults to user role', async () => {
+      let user = new User({
+        username: uuid(),
+        password: uuid(),
+      });
+
+      await user.save();
+
+      expect(user.role).toEqual('user');
+      expect(user.capabilities).toEqual(['read']);
+    });
+    
+    it('rejects invalid role', async () => {
+      let user = new User({
+        username: uuid(),
+        password: uuid(),
+        role: 'superstar',
+      });
+
+      expect(user.save()).rejects.toMatch('ValidationError');
+    });
+    
+    it('accepts editor role', async () => {
+      let user = new User({
+        username: uuid(),
+        password: uuid(),
+        role: 'editor',
+      });
+
+      await user.save();
+
+      expect(user.role).toEqual('editor');
+      expect(user.capabilities).toEqual(['read','update']);
+    });
+    
+    it('accepts admin role', async () => {
+      let user = new User({
+        username: uuid(),
+        password: uuid(),
+        role: 'admin',
+      });
+
+      await user.save();
+
+      expect(user.role).toEqual('admin');
+      expect(user.capabilities).toEqual(['create','read','update','delete']);
+    });
+  });
 });
